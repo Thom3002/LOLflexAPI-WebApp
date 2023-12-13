@@ -88,10 +88,12 @@ for match in my_matches:
 # Limita a quantidade de casas decimais para 2
 # pd.set_option('display.float_format', '{:.2f}'.format) 
 
+# Remove linhas duplicadas
+df = df.drop_duplicates()
 
 # Agrupa a tabela de partidas por role para cada jogador, somando os valores
-grouped_df = df.groupby(['SummonerName', 'Role'])[['Kills', 'Deaths', 'Assists', 'KDA', 'TotalMinionsKilled']].sum().reset_index()
-# print(grouped_df)
+sum_df = df.groupby(['SummonerName', 'Role'])[['Kills', 'Deaths', 'Assists', 'KDA', 'TotalMinionsKilled']].sum().reset_index()
+# print(sum_df)
 
 # Count the number of matches per role for each player
 matches_per_role = df.groupby(['SummonerName', 'Role']).size().reset_index(name='Matches')
@@ -103,7 +105,7 @@ print(average_df)
 average_df = pd.merge(average_df, matches_per_role, on=['SummonerName', 'Role'])
 # print(average_df)
 
-grouped_df.to_csv('tabelas/grouped.csv', index=False)
+sum_df.to_csv('tabelas/grouped.csv', index=False)
 average_df.to_csv('tabelas/average.csv', index=False)
 df.to_csv('tabelas/matches.csv', index=False)
 
