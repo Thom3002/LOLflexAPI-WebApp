@@ -1,0 +1,15 @@
+# .gitignore
+
+```
+*/Lib/*
+```
+*/Scripts/*
+```
+*/bin/*
+```
+*.cfg
+```
+*.pyc
+```
+*.csv
+```
