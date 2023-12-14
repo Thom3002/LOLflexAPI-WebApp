@@ -63,13 +63,17 @@ for match in my_matches:
         # print("****participants summoner name: " + participant['summonerName'])
         if summoner_name in interested_names:
             print("Summoner " + summoner_name + " is in the list of interested names. Adding to the table...")
+            
             role = participant['individualPosition']
             total_minions_killed = participant['totalMinionsKilled'] + participant['neutralMinionsKilled']
             cs_per_min = total_minions_killed / (match_detail['info']['gameDuration'] / 60)
+            kda = (participant['kills'] + participant['assists']) / participant['deaths'] if participant['deaths'] != 0 else participant['kills'] + participant['assists']
+            
             if (role == 'UTILITY'):
                 role = 'SUPPORT'
             elif (role == 'BOTTOM'):
                 role = 'ADC'
+                
             participant_row = {
                 'MatchNumber': "match " + str(match_index),
                 'SummonerName': summoner_name,
@@ -78,7 +82,7 @@ for match in my_matches:
                 'Kills': participant['kills'],
                 'Deaths': participant['deaths'],
                 'Assists': participant['assists'],
-                'KDA': (participant['kills'] + participant['assists']) / participant['deaths'] if participant['deaths'] != 0 else participant['kills'] + participant['assists'],
+                'KDA': kda,
                 'CS': total_minions_killed,
                 'CS/min' : cs_per_min,
                 'Date': date
@@ -112,6 +116,9 @@ matches_per_role = df.groupby(['SummonerName', 'Role']).size().reset_index(name=
 
 # Calcula a média de cada jogador por role
 average_df = df.groupby(['SummonerName', 'Role'])[['Kills', 'Deaths', 'Assists','KDA', 'CS', 'CS/min']].mean().astype(float).round(1).reset_index()
+
+# Calcula o KDA de cada jogador pela média de kills, deaths e assists (KDA = (Kills + Assists) / Deaths)
+average_df['KDA'] = average_df.apply(lambda row: (row['Kills'] + row['Assists']) / row['Deaths'] if row['Deaths'] != 0 else 0, axis=1).round(1)
 print(average_df)
 
 # Adiciona a coluna de número de partidas na tabela de médias
