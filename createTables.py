@@ -47,10 +47,8 @@ for match in my_matches:
     if date > compare_date:
         SEASON_ATUAL = True
     else:
-        print("Date is not after 08/01/2023")
+        print("MATCH BEFORE 08/01/2023")
         SEASON_ATUAL = False
-        
-    # print(match_detail)
     
     # Verifica se a partida é uma partida clássica
     if(match_detail['info']['gameMode'] != 'CLASSIC'):
@@ -86,9 +84,12 @@ for match in my_matches:
                 'Date': date
             }
             num_participantes += 1
-            if participant_row['Role'] == 'Invalid':
-                print("Invalid role for " + participant_row['SummonerName'] + " in match " + str(match_index))
             df_new_row = pd.DataFrame(participant_row, index=[match_index])
+            
+            # Exclude empty or all-NA columns before the concat operation
+            df_provisorio = df_provisorio.dropna(how ='all', axis=1)
+            df = df.dropna(how = 'all', axis = 1)
+            
             df_provisorio = pd.concat([df_provisorio, df_new_row])
     
     # Somente adiciona na tabela se a partida possuir 3 ou mais participantes da lista de nomes interessados
