@@ -1,21 +1,7 @@
-# .gitignore
-
-```
-*/Lib/*
-```
-*/Scripts/*
-```
-*/bin/*
-```
-*/venv/*
-
-*.cfg
-```
+Lib/
+Scripts/
 *.pyc
-```
 *.csv
-```
-*.bat
-```
-*.exe
-```
+*.cfg
+
+
