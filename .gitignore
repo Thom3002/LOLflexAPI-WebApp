@@ -3,5 +3,5 @@ Scripts/
 *.pyc
 *.csv
 *.cfg
-
+bootstrap/
 
